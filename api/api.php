@@ -1,6 +1,7 @@
 <?php
 require("webcui_lib.php");
 
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type, Origin, X-Requested-With');
 header('Access-Control-Allow-Methods: POST, GET');
@@ -11,59 +12,33 @@ putenv("LANG=C.UTF-8");
 setlocale(LC_CTYPE, "C.UTF-8");
 
 
-$rs = $_POST['rs'];
-$pro = getString('pro');
-$form = $_POST['form'];
+$filebody = $_POST['filebody'];
+$processor = ' ';
+$order = ' ';
+$option = ' ';
 
-$ip = $_SERVER['REMOTE_ADDR'];
-
-$tmpfile = './sol/log/c' . $ip . '_' . substr(time().PHP_EOL, 0, -1);
-
-if ($form == 'haskell') {
-  $tmpfile = $tmpfile . '.hs';
-} else {
-  $tmpfile = $tmpfile . '.' . $form;
-}
+$tmpfile = "./tmp/tempfile.trs";
 $fp = fopen($tmpfile, "w");
-fwrite($fp, $rs);
+fwrite($fp, $filebody);
 fclose($fp);
 
-$tmpfile = 'ex';
-if ($form == 'haskell') {                                                       
-      $tmpfile = $tmpfile . '.hs';                                                  
-} else {                                                                        
-      $tmpfile = $tmpfile . '.' . $form;                                            
-}                                                                               
-$fp = fopen('./sol/' . $tmpfile, "w");                                                     
-fwrite($fp, $rs);                                                               
-fclose($fp);    
-
-$timeout = 'timeout 10 ';
-$cmd = '';
-
-if ($form == 'haskell' && ($pro == '\'cri\'' || $pro == '\'snG\'' || $pro == '\'cr\'')) {
-  if ($pro == '\'snG\'') {
-    $pro == 'sn';
-  }
-  $cmd = './gsol-wrapper.sh ' . $pro . ' ' . $tmpfile;
-} else if ($form != 'haskell') {
-  if ($pro == '\'cr\'' || $pro == '\'sn\'') {
-    $cmd = $timeout . './Main ' . $pro . ' ' . $tmpfile . ' --sol= 2>&1';
-  } else if ($pro == '\'snG\'') {
-    $cmd = $timeout . './Main sn ' . $tmpfile . ' --sol=GS 2>&1';
-  } else {
-    $cmd = 'echo "fatal error: the combination of the format and command is impossible." 2>&1';
-  }
-} else {
-  $cmd = 'echo "fatal error: the combination of the format and command is impossible." 2>&1';
+if($_POST['processor'] !== 'none'){
+    $processor .= $_POST['processor'];
+}
+else{
+    $order .= $_POST['order'];
 }
 
-if($_POST['trfp'] === 'true'){
-  $cmd = './Main sn ' . $tmpfile . ' --trfp 2>&1';
-}
+if ($_POST['help'] === 'true') { $option .= '--help ';    $tmpfile = ''; }
 
-exec('cd ./sol; ' . $cmd, $output);
+$cmd = '/var/www/html/webcui/sol/api/sol/bin/NaTT-1.9/NaTT.exe '. $tmpfile . $processor . $order . $option . ' 2>&1';
 
+//echo '<font color=\"green\">&gt; ' . $cmd . '</font><br>';
+//CUIプログラムを実行
+exec($cmd, $output);
+exec('rm ./tmp/tempfile.trs');
+
+//結果表示
 printOutput($output);
 
 ?>

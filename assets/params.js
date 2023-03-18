@@ -1,70 +1,52 @@
 export const params = {
-  trfp: {
-    default: false
-  },
-  file: {
+  file:{
     display: 'File',
     type: 'file',
-    target: 'rs',
+    target: 'filebody',
     default: [],
-    size: 'whole'
+    size: 6
   },
-  form: {
-    display: 'Format',
+
+  processor: {
+    display: 'processor',
     type: 'select',
     items: [
-      {      
-        name: 'xml',            
-        display: 'XML'                    
-      },      
-      {
-        name: 'hs',
-        display: 'SOL (.hs)',
-      },
-      {
-        name: 'trs',
-        display: 'TRS',
-      }
+      { name: 'none', display: '(None)', flag: 'none' },
+      { name: 'UNCUURRY', display: 'UNCURRY' },
+      { name: 'EDG', display: 'EDG' },
+      { name: 'LOOP', display: 'LOOP' }
     ],
-    default: {
-      name: 'hs',
-      display: 'SOL (.hs)',
-    },
-    size: 'half'
+    default: { name: 'none', display: '(None)', flag: 'none' },
+    size: 3
   },
-  pro: {
-    display: 'Check',
+
+  order: {
+    display: 'order',
     type: 'select',
     items: [
-      {
-        name: 'cr',
-        display: 'CR',
-      },
-      {
-        name: 'cr_CBV',
-        display: 'CR(CBV)',
-      },
-      {
-        name: 'snG',
-        display: 'SN'
-      },
-      {
-        name: 'cri',
-        display: 'WCR'
-      },
+      { name: '', display: '(None)' },
+      { name: 'WPO', display: 'WPO' },
+      { name: 'POLO', display: 'POLO' },
+      { name: 'LPO', display: 'LPO' },
+      { name: 'MPO', display: 'MPO' },
+      { name: 'RPO', display: 'RPO' },
+      { name: 'KBO', display: 'KBO' }
     ],
-    default: {
-      name: 'cr',
-      display: 'CR',
-    },
-    size: 'half'
+    default: { name: '', display: '(None)' },
+    size: 3,
+    if: 'none'
   },
-  rs: {
-    display: 'File body',
+  //option  
+  help: {
+    default: false
+  },
+
+  filebody: {
+    display: 'file body',
     type: 'textarea',
-    rows: 18,
+    rows: 20,
     default: '',
-    size: 'whole',
-    monospace: 'true'
+    monospace: true,
+    size: 'whole'
   }
 }
