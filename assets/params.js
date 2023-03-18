@@ -1,70 +1,35 @@
 export const params = {
-  trfp: {
-    default: false
+  tool: {
+    default: 'dedukti'
   },
   file: {
     display: 'File',
     type: 'file',
-    target: 'rs',
+    target: 'filebody',
     default: [],
     size: 'whole'
   },
-  form: {
-    display: 'Format',
-    type: 'select',
-    items: [
-      {      
-        name: 'xml',            
-        display: 'XML'                    
-      },      
+  extension: {
+    display: 'Lambdapi Extention',
+    type: 'radio',
+    buttons: [
       {
-        name: 'hs',
-        display: 'SOL (.hs)',
+        name: 'lp',
+        display: 'lp'
       },
       {
-        name: 'trs',
-        display: 'TRS',
+        name: 'dk',
+        display: 'dk'
       }
     ],
-    default: {
-      name: 'hs',
-      display: 'SOL (.hs)',
-    },
-    size: 'half'
+    default: 'lp'
   },
-  pro: {
-    display: 'Check',
-    type: 'select',
-    items: [
-      {
-        name: 'cr',
-        display: 'CR',
-      },
-      {
-        name: 'cr_CBV',
-        display: 'CR(CBV)',
-      },
-      {
-        name: 'snG',
-        display: 'SN'
-      },
-      {
-        name: 'cri',
-        display: 'WCR'
-      },
-    ],
-    default: {
-      name: 'cr',
-      display: 'CR',
-    },
-    size: 'half'
-  },
-  rs: {
-    display: 'File body',
+  filebody: {
+    display: 'filebody',
     type: 'textarea',
-    rows: 18,
+    rows: 19,
     default: '',
-    size: 'whole',
-    monospace: 'true'
+    monospace: true,
+    size: 'whole'
   }
 }

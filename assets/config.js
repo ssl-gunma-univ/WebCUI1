@@ -1,15 +1,15 @@
 export const config = {
-  name: `SOL`,                // Application's name
+  name: `Checktools`,                // Application's name
 
   // logo: `logo_icon.png`,        // A filename in ~/static/
 
-  address: '/webcui/sn',      // http://localhost:3000/[address]
+  address: '/webcui/checktools',      // http://localhost:3000/[address]
 
-  webApiUrl: `http://solweb.mydns.jp/webcui/sn/api/api.php`,
-             //`http://localhost:80/webcui/sn/api/api.php`,
+  webApiUrl: `http://solweb.mydns.jp/webcui/checktools/api/api.php`,
+             //`http://localhost:80/webcui/checktools/api/api.php`, 
 
   consoleLocation: 'right',    // Placing the console. [left | right | top | bottom]
-  toolbarLocation: 'left',   // Placing the toolbar. [left | right]
+  toolbarLocation: 'left',    // Placing the toolbar. [left | right]
   noSpace: true,
   
   keepState: false,
@@ -28,7 +28,7 @@ export const config = {
       text: 'Clear'
     },
     history: {
-      enable: false,
+      enable: true,
       icon: 'mdi-history',
       text: 'History'
     },
@@ -40,39 +40,53 @@ export const config = {
       enable: true,
       icon: 'mdi-file-multiple',
       text: 'Examples',
-      webApiUrl: 'http://solweb.mydns.jp/webcui/sn/api/files.php',
-                 //'http://localhost:80/webcui/sn/api/files.php',
-      googleDriveApiUrl: 'https://script.google.com/macros/s/AKfycbyJ815WcoK7k7Zbf480eOwydZl-VhuLfLoAzacvQWOe8Uv4jIH4BeMYIW9Rl3ATuFEbPQ/exec'
+      webApiUrl: 'http://solweb.mydns.jp/webcui/checktools/api/files.php',
+                 //'http://localhost:80/webcui/checktools/api/files.php',
     },
     variables: {
       enable: false,
       icon: 'mdi-order-alphabetical-ascending'
     },
-    sendReq: {
+    dedukti: {
       enable: true,
-      icon: 'mdi-play',
-      text: 'Check',
-      before: (webcui) => {
-        webcui.updateParam({ key: 'trfp', value: { value: false } })
-        webcui.clearConsole();
-      },
-      after: (webcui, result) => {
-        webcui.addLine({ html: result })
-      }
-    },
-    trfp: {
-      enable: true,
-      icon: 'mdi-alpha-t',
-      text: 'Trfp',
+      icon: 'mdi-alpha-d',
+      text: 'Dedukti',
       method: (webcui) => {
         webcui.sendReq(
           (webcui) => {
-            webcui.updateParam({ key: 'trfp', value: { value: true } })
             webcui.clearConsole()
+            webcui.updateParam({ key: 'tool', value: { value: 'dedukti' } })
           },
           (webcui, result) => {
             webcui.addLine({ html: result })
           })
+      }
+    },
+    lambdapi: {
+      enable: true,
+      icon: 'mdi-alpha-l',
+      text: 'Lambdapi',
+      method: (webcui) => {
+        webcui.sendReq(
+          (webcui) => {
+            webcui.clearConsole()
+            webcui.updateParam({ key: 'tool', value: { value: 'lambdapi' } })
+          },
+          (webcui, result) => {
+            webcui.addLine({ html: result })
+          })
+      }
+    },
+    sendReq: {
+      enable: true,
+      icon: 'mdi-alpha-n',
+      text: 'NaTT',
+      before: (webcui) => {
+        webcui.clearConsole()
+        webcui.updateParam({ key: 'tool', value: { value: 'natt' } })
+      },
+      after: (webcui, result) => {
+        webcui.addLine({ html: result })
       }
     }
   }
