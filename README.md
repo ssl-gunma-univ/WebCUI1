@@ -38,7 +38,8 @@ $ npm run generate
 
 GASのコードを修正したら、デプロイしなおし、新しいURLを使う。
 
-##files.gs 変数dirについて
+## files.gs 変数dirについて
+
 name : ファイルの中身の展開先変数名
 
 display : Webページ上に表示する名前
