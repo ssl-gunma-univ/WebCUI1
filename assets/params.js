@@ -1,70 +1,53 @@
 export const params = {
-  trfp: {
-    default: false
-  },
-  file: {
+  help: { default: false },
+
+  file:{
     display: 'File',
     type: 'file',
-    target: 'rs',
+    target: 'filebody',
     default: [],
-    size: 'whole'
+    size: 6
   },
-  form: {
-    display: 'Format',
+  
+  fileextension: {
+    display: 'file extension',
     type: 'select',
     items: [
-      {      
-        name: 'xml',            
-        display: 'XML'                    
-      },      
-      {
-        name: 'hs',
-        display: 'SOL (.hs)',
-      },
-      {
-        name: 'trs',
-        display: 'TRS',
-      }
+      { name: 'lp', display: 'lp' },
+      { name: 'dk', display: 'dk' }
     ],
-    default: {
-      name: 'hs',
-      display: 'SOL (.hs)',
-    },
-    size: 'half'
+    default: { name: 'lp', display: 'lp' },
+    size: 3
   },
-  pro: {
-    display: 'Check',
+  
+  command: {
+    display: 'Command',
     type: 'select',
     items: [
-      {
-        name: 'cr',
-        display: 'CR',
-      },
-      {
-        name: 'cr_CBV',
-        display: 'CR(CBV)',
-      },
-      {
-        name: 'snG',
-        display: 'SN'
-      },
-      {
-        name: 'cri',
-        display: 'WCR'
-      },
+      { name: '',          display: '(None)' },
+      { name: 'check',     display: 'check',     flag: 'check' },
+      { name: 'decision-tree',      display: 'decision-tree',  flag: 'tree' },
+      { name: 'export',    display: 'export',       flag: 'export' },
+      { name: 'help',      display: 'help' },
+      { name: 'version',   display: 'version' }
     ],
-    default: {
-      name: 'cr',
-      display: 'CR',
-    },
-    size: 'half'
+    default: { name: 'check', display: 'check' },
+    size: 3
   },
-  rs: {
-    display: 'File body',
+
+  //common option
+  recordtime:  { display: '--record-time',  type: 'check',  default: false,  size: 'half' },
+  nowarnings:  { display: '--no-warnings',  type: 'check',  default: false,  size: 'half' },
+  
+  //decision-tree option
+  ghost:  { display: '--ghost', type: 'check',  default: false,  size: 'whole', if: 'tree' },
+  
+  filebody: {
+    display: 'file body',
     type: 'textarea',
-    rows: 18,
+    rows: 20,
     default: '',
-    size: 'whole',
-    monospace: 'true'
+    monospace: true,
+    size: 'whole'
   }
 }

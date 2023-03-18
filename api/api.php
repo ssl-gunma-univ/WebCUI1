@@ -1,6 +1,7 @@
 <?php
 require("webcui_lib.php");
 
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type, Origin, X-Requested-With');
 header('Access-Control-Allow-Methods: POST, GET');
@@ -11,59 +12,54 @@ putenv("LANG=C.UTF-8");
 setlocale(LC_CTYPE, "C.UTF-8");
 
 
-$rs = $_POST['rs'];
-$pro = getString('pro');
-$form = $_POST['form'];
+$command = $_POST['command'];
+$filebody = $_POST['filebody'];
 
-$ip = $_SERVER['REMOTE_ADDR'];
-
-$tmpfile = './sol/log/c' . $ip . '_' . substr(time().PHP_EOL, 0, -1);
-
-if ($form == 'haskell') {
-  $tmpfile = $tmpfile . '.hs';
-} else {
-  $tmpfile = $tmpfile . '.' . $form;
-}
+$tmpfile = "/var/www/html/webcui/lambdapi-examples/tempfile." . $_POST['fileextension'];
 $fp = fopen($tmpfile, "w");
-fwrite($fp, $rs);
+fwrite($fp, $filebody);
 fclose($fp);
 
-$tmpfile = 'ex';
-if ($form == 'haskell') {                                                       
-      $tmpfile = $tmpfile . '.hs';                                                  
-} else {                                                                        
-      $tmpfile = $tmpfile . '.' . $form;                                            
-}                                                                               
-$fp = fopen('./sol/' . $tmpfile, "w");                                                     
-fwrite($fp, $rs);                                                               
-fclose($fp);    
+$option = ' --no-colors ';
+if ($_POST['help'] === 'true')        { $option .= '--help ';    $tmpfile = ''; }
+if ($_POST['recordtime'] === 'true')  { $option .= '--record-time '; }
+if ($_POST['nowarnings'] === 'true')  { $option .= '--no-warnings '; }
 
-$timeout = 'timeout 10 ';
-$cmd = '';
-
-if ($form == 'haskell' && ($pro == '\'cri\'' || $pro == '\'snG\'' || $pro == '\'cr\'')) {
-  if ($pro == '\'snG\'') {
-    $pro == 'sn';
-  }
-  $cmd = './gsol-wrapper.sh ' . $pro . ' ' . $tmpfile;
-} else if ($form != 'haskell') {
-  if ($pro == '\'cr\'' || $pro == '\'sn\'') {
-    $cmd = $timeout . './Main ' . $pro . ' ' . $tmpfile . ' --sol= 2>&1';
-  } else if ($pro == '\'snG\'') {
-    $cmd = $timeout . './Main sn ' . $tmpfile . ' --sol=GS 2>&1';
-  } else {
-    $cmd = 'echo "fatal error: the combination of the format and command is impossible." 2>&1';
-  }
-} else {
-  $cmd = 'echo "fatal error: the combination of the format and command is impossible." 2>&1';
+switch($command){
+  case '':
+    $option = ''; $tmpfile = '';
+    break;
+  case 'help':
+    $option = ''; $tmpfile = '';
+    break;
+  case 'version':
+    $option = ''; $tmpfile = '';
+    break;
+  case 'decision-tree':
+    if ($_POST['ghost'] === 'true')  { $option .= '--ghost '; }
+    break;
 }
 
-if($_POST['trfp'] === 'true'){
-  $cmd = './Main sn ' . $tmpfile . ' --trfp 2>&1';
-}
+$cmd = '/home/hiroto/.opam/default/bin/lambdapi ' . $command . $option . $tmpfile . ' 2>&1';
 
-exec('cd ./sol; ' . $cmd, $output);
+//echo '<font color=\"green\">&gt; ' . $cmd . '</font><br>';
+//CUIプログラム実行
+exec($cmd, $output, $result_code); //実行
+exec('rm /var/www/html/webcui/lambdapi-examples/tempfile.lp /var/www/html/webcui/lambdapi-examples/tempfile.dk');
 
+//結果表示
 printOutput($output);
+
+switch($result_code){
+  case 123:
+    echo "<font color=\"red\">indiscriminate errors reported on standard error.</font>";
+    break;
+  case 124:
+    echo "<font color=\"red\">command line parsing errors.</font>";
+    break;
+  case 125:
+    echo "<font color=\"red\">unexpected internal errors (bugs).</font>";
+    break;
+}
 
 ?>
