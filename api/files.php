@@ -11,46 +11,39 @@ putenv('LANG=C.UTF-8');
 if ($_POST['path'] == null) {
   $dirs = array(
     array(
-      'name' => 'rs',
-      'display' => 'TermComp',
-      'dir' => './sol/hor/All22',
-      'extension' => 'form'
-    ),
-		
-    array(
-      'name' => 'rs',
-      'display' => 'arXiv\'20',
-      'dir' => './sol/hor/arXiv20',
-      'extension' => 'form'
+      'name' => 'filebody',
+      'display' => 'OK',
+      'dir' => '/var/www/html/webcui/dedukti-examples/OK'
     ),
     array(
-      'name' => 'rs',
-      'display' => 'SCP\'18',
-      'dir' => './sol/hor/SCPex',
-      'extension' => 'form'
+      'name' => 'filebody',
+      'display' => 'KO',
+      'dir' => '/var/www/html/webcui/dedukti-examples/KO'
     ),
     array(
-      'name' => 'rs',
-      'display' => 'Cops',
-      'dir' => './sol/hor/Cops',
-      'extension' => 'form'
+      'name' => 'filebody',
+      'display' => 'LIB',
+      'dir' => '/var/www/html/webcui/dedukti-examples/LIB'
     ),
     array(
-      'name' => 'rs',
-      'display' => 'ICFP\'17',
-      'dir' => './sol/hor/JEX',
-      'extension' => 'form'
+      'name' => 'filebody',
+      'display' => 'meta',
+      'dir' => '/var/www/html/webcui/dedukti-examples/meta'
     ),
     array(
-      'name' => 'rs',
-      'display' => 'Polymorphic',
-      'dir' => './sol/hor/PolySOL',
-      'extension' => 'form'
+      'name' => 'filebody',
+      'display' => 'meta_files',
+      'dir' => '/var/www/html/webcui/dedukti-examples/meta_files'
+    ),
+    array(
+      'name' => 'filebody',
+      'display' => 'universo',
+      'dir' => '/var/www/html/webcui/dedukti-examples/universo'
     )
   );
 
   function getFiles($arr) {
-    $arr['files'] = glob($arr['dir'] . '/*');
+    $arr['files'] = glob($arr['dir'] . '/*.dk');
     return $arr;
   }
 

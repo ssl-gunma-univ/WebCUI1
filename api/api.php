@@ -11,59 +11,66 @@ putenv("LANG=C.UTF-8");
 setlocale(LC_CTYPE, "C.UTF-8");
 
 
-$rs = $_POST['rs'];
-$pro = getString('pro');
-$form = $_POST['form'];
+$command = $_POST['command'];
+$filebody = $_POST['filebody'];
 
-$ip = $_SERVER['REMOTE_ADDR'];
-
-$tmpfile = './sol/log/c' . $ip . '_' . substr(time().PHP_EOL, 0, -1);
-
-if ($form == 'haskell') {
-  $tmpfile = $tmpfile . '.hs';
-} else {
-  $tmpfile = $tmpfile . '.' . $form;
-}
+$tmpfile = "./tmp/tempfile.dk";
 $fp = fopen($tmpfile, "w");
-fwrite($fp, $rs);
+fwrite($fp, $filebody);
 fclose($fp);
 
-$tmpfile = 'ex';
-if ($form == 'haskell') {                                                       
-      $tmpfile = $tmpfile . '.hs';                                                  
-} else {                                                                        
-      $tmpfile = $tmpfile . '.' . $form;                                            
-}                                                                               
-$fp = fopen('./sol/' . $tmpfile, "w");                                                     
-fwrite($fp, $rs);                                                               
-fclose($fp);    
+//common option
+$option = ' --no-color ';
+if ($_POST['help'] === 'true')    { $option .= '--help ';    $tmpfile = ''; }
+if ($_POST['verbose'] === 'true') { $option .= '--verbose '; }
 
-$timeout = 'timeout 10 ';
-$cmd = '';
-
-if ($form == 'haskell' && ($pro == '\'cri\'' || $pro == '\'snG\'' || $pro == '\'cr\'')) {
-  if ($pro == '\'snG\'') {
-    $pro == 'sn';
-  }
-  $cmd = './gsol-wrapper.sh ' . $pro . ' ' . $tmpfile;
-} else if ($form != 'haskell') {
-  if ($pro == '\'cr\'' || $pro == '\'sn\'') {
-    $cmd = $timeout . './Main ' . $pro . ' ' . $tmpfile . ' --sol= 2>&1';
-  } else if ($pro == '\'snG\'') {
-    $cmd = $timeout . './Main sn ' . $tmpfile . ' --sol=GS 2>&1';
-  } else {
-    $cmd = 'echo "fatal error: the combination of the format and command is impossible." 2>&1';
-  }
-} else {
-  $cmd = 'echo "fatal error: the combination of the format and command is impossible." 2>&1';
+switch ($command) {
+  case "check":
+    //check option
+    if ($_POST['coc'] === 'true')     { $option .= '--coc '; }
+    if ($_POST['db'] === 'true')      { $option .= '--db '; }
+    if ($_POST['eis'] === 'true')     { $option .= '--errors-in-snf '; }
+    if ($_POST['eta'] === 'true')     { $option .= '--eta '; }
+    if ($_POST['ll'] === 'true')      { $option .= '--ll '; }
+    if ($_POST['typelhs'] === 'true') { $option .= '--type-lhs '; }
+    break;
+  case "dep":
+    //dep option
+    if ($_POST['ignore'] === 'true') { $option .= '--ignore '; }
+    if ($_POST['sort'] === 'true')   { $option .= '--sort '; }
+    break;
+  case "meta":
+    //meta option
+    if ($_POST['mdebug'] === 'true') { $option .= '--meta-debug '; }
+    if ($_POST['nobeta'] === 'true') { $option .= '--no-beta '; }
+    if ($_POST['nometa'] === 'true') { $option .= '--no-meta '; }
+    break;
+  case "prune":
+    //prune option
+    if ($_POST['log'] === 'true') { $option .= '--log '; }
+    break;
 }
 
-if($_POST['trfp'] === 'true'){
-  $cmd = './Main sn ' . $tmpfile . ' --trfp 2>&1';
-}
+$cmd = '/home/hiroto/.opam/default/bin/dk ' . $command . $option . $tmpfile . ' 2>&1';
 
-exec('cd ./sol; ' . $cmd, $output);
+//echo "<font color=\"green\">&gt; " . $cmd . "</font><br>";
+//CUIプログラムを実行
+exec($cmd, $output, $result_code);
+exec('rm ./tmp/tempfile.dk');
 
+//結果表示
 printOutput($output);
+
+switch($result_code){
+  case 123:
+    echo "<font color=\"red\">indiscriminate errors reported on standard error.</font>";
+    break;
+  case 124:
+    echo "<font color=\"red\">command line parsing errors.</font>";
+    break;
+  case 125:
+    echo "<font color=\"red\">unexpected internal errors (bugs).</font>";
+    break;
+}
 
 ?>
