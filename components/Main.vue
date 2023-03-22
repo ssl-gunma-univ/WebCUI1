@@ -6,15 +6,47 @@
       'd-flex flex-row-reverse'    : config.consoleLocation === 'left',
       'd-flex flex-row'            : config.consoleLocation === 'right',
     }">
+      <v-slider
+        :value="formsWidth"
+        @change="(value) => formsWidth = value"
+        :max="9"
+        :min="3"
+        hide-details
+        class="col-md-12"
+      ></v-slider>
       <div
         class="pa-0"
         :class="{
           'mt-3'          : config.consoleLocation === 'top',
           'mb-3'          : config.consoleLocation === 'bottom',
-          'col-md-6 mb-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.smAndDown,
-          'col-md-6 pl-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.mdAndUp,
-          'col-md-6 mt-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.smAndDown,
-          'col-md-6 pr-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.mdAndUp,
+          'col-md-3 mb-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.smAndDown && formsWidth === 3,
+          'col-md-3 pl-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.mdAndUp && formsWidth === 3,
+          'col-md-3 mt-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.smAndDown && formsWidth === 3,
+          'col-md-3 pr-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.mdAndUp && formsWidth === 3, 
+          'col-md-4 mb-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.smAndDown && formsWidth === 4,
+          'col-md-4 pl-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.mdAndUp && formsWidth === 4,
+          'col-md-4 mt-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.smAndDown && formsWidth === 4,
+          'col-md-4 pr-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.mdAndUp && formsWidth === 4,
+          'col-md-5 mb-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.smAndDown && formsWidth === 5,
+          'col-md-5 pl-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.mdAndUp && formsWidth === 5,
+          'col-md-5 mt-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.smAndDown && formsWidth === 5,
+          'col-md-5 pr-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.mdAndUp && formsWidth === 5,
+          'col-md-6 mb-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.smAndDown && formsWidth === 6,
+          'col-md-6 pl-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.mdAndUp && formsWidth === 6,
+          'col-md-6 mt-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.smAndDown && formsWidth === 6,
+          'col-md-6 pr-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.mdAndUp && formsWidth === 6,
+          'col-md-7 mb-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.smAndDown && formsWidth === 7,
+          'col-md-7 pl-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.mdAndUp && formsWidth === 7,
+          'col-md-7 mt-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.smAndDown && formsWidth === 7,
+          'col-md-7 pr-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.mdAndUp && formsWidth === 7,
+          'col-md-8 mb-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.smAndDown && formsWidth === 8,
+          'col-md-8 pl-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.mdAndUp && formsWidth === 8,
+          'col-md-8 mt-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.smAndDown && formsWidth === 8,
+          'col-md-8 pr-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.mdAndUp && formsWidth === 8,
+          'col-md-9 mb-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.smAndDown && formsWidth === 9,
+          'col-md-9 pl-3' : config.consoleLocation === 'left' && $vuetify.breakpoint.mdAndUp && formsWidth === 9,
+          'col-md-9 mt-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.smAndDown && formsWidth === 9,
+          'col-md-9 pr-3' : config.consoleLocation === 'right' && $vuetify.breakpoint.mdAndUp && formsWidth === 9,
         }"
       >
         <v-card
@@ -180,7 +212,13 @@
         :height="$vuetify.breakpoint.xs ? '80vh' : consoleHeight"
         style="overflow: auto"
         :class="{
-          'col-md-6' : config.consoleLocation === 'left' || config.consoleLocation === 'right',
+          'col-md-9' : (config.consoleLocation === 'left' || config.consoleLocation === 'right') && formsWidth === 3,
+          'col-md-8' : (config.consoleLocation === 'left' || config.consoleLocation === 'right') && formsWidth === 4,
+          'col-md-7' : (config.consoleLocation === 'left' || config.consoleLocation === 'right') && formsWidth === 5,
+          'col-md-6' : (config.consoleLocation === 'left' || config.consoleLocation === 'right') && formsWidth === 6,
+          'col-md-5' : (config.consoleLocation === 'left' || config.consoleLocation === 'right') && formsWidth === 7,
+          'col-md-4' : (config.consoleLocation === 'left' || config.consoleLocation === 'right') && formsWidth === 8,
+          'col-md-3' : (config.consoleLocation === 'left' || config.consoleLocation === 'right') && formsWidth === 9,
           'dark-card-borders' : $vuetify.theme.dark
         }"
       >
@@ -223,7 +261,8 @@ export default {
   data: () => ({
     config,
     formsHeight: 0,
-    consoleHeight: 0
+    consoleHeight: 0,
+    formsWidth: 6
   }),
   computed: {
     ...mapState(['params', 'console', 'filename']),
